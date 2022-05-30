@@ -1,4 +1,4 @@
-import checkIsMovieExistInList from "../helpers/useModal";
+import checkIsMovieExistInList from "../helpers/checkIsMivieExistinList";
 
 class FavoritesService {
   getAllList() {

@@ -20,6 +20,7 @@ import MovieDetailsModal from "../modal/MovieModalDetails";
 import useModal from "../../hooks/useModal";
 import imgPlaceholder from "../../assets/ic-placeholder.svg";
 import { ReactComponent as StarIcon } from "../../assets/ic-star.svg";
+import checkIsMovieExistInList from "../../helpers/checkIsMivieExistinList";
 
 const ListOfMovies = ({
   allMoviesState,
@@ -38,7 +39,7 @@ const ListOfMovies = ({
       getListMoviesClear();
     };
   }, [getListMoviesClear, getListMovies]);
-
+  /*
   for (let i = 0; i < allMoviesState.favouriteList.length; i++) {
     for (let j = 0; j < allMoviesState.data.length; j++) {
       if (allMoviesState.favouriteList[i] === allMoviesState.data[j]) {
@@ -48,7 +49,7 @@ const ListOfMovies = ({
       }
     }
   }
-
+*/
   const [modalVisible, toggleModal] = useModal();
 
   const [currentMovieID, setCurrentMovieID] = useState(null);
@@ -78,7 +79,11 @@ const ListOfMovies = ({
               >
                 <StarIcon
                   className={
-                    !!movie.isFavorite
+                    movie?.id &&
+                    checkIsMovieExistInList(
+                      movie.id,
+                      allMoviesState.favouriteList
+                    )
                       ? "favoriteStarActive"
                       : "favoriteStarInActive"
                   }
