@@ -1,0 +1,74 @@
+.moviesContainer {
+  display: flex;
+  max-width: 90vw;
+}
+
+.movie {
+
+  &Card {
+    width: 250px;
+    height: 455px;
+    display: inline-block !important;
+    margin: 12px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 7px 5px rgba(221, 221, 221, 1);
+
+    &Img {
+      object-fit: cover;
+      width: 200px;
+      height: 300px;
+    }
+
+    &Description {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.toggleCard {
+  border: none;
+  margin: 10px 0 5px 0;
+}
+
+.favoriteStarInActive {
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 32px;
+  height: 32px;
+
+  & path {
+    fill: grey;
+  }
+}
+
+.favoriteStarActive {
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 32px;
+  height: 32px;
+
+  & path {
+    fill: gold;
+  }
+}
+
+.favorite {
+  display: flex;
+  justify-content: space-between;
+}
+
+.favoriteRemoveBtn {
+  margin-left: 10px;
+}
+
+.favoriteContainer {
+  max-width: fit-content;
+  min-width: 15vw;
+}
+

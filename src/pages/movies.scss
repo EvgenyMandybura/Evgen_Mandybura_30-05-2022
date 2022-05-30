@@ -1,0 +1,11 @@
+.moviesPage {
+  display: flex;
+  margin: 5vw;
+}
+
+@media  (max-width: 600px) {
+  .moviesPage {
+    display: block;
+    margin: 14vw;
+  }
+}
