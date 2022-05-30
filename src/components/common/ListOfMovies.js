@@ -39,17 +39,7 @@ const ListOfMovies = ({
       getListMoviesClear();
     };
   }, [getListMoviesClear, getListMovies]);
-  /*
-  for (let i = 0; i < allMoviesState.favouriteList.length; i++) {
-    for (let j = 0; j < allMoviesState.data.length; j++) {
-      if (allMoviesState.favouriteList[i] === allMoviesState.data[j]) {
-        allMoviesState.data[j].isFavorite = true;
-      } else {
-        allMoviesState.data[j].isFavorite = false;
-      }
-    }
-  }
-*/
+
   const [modalVisible, toggleModal] = useModal();
 
   const [currentMovieID, setCurrentMovieID] = useState(null);

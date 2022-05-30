@@ -14,8 +14,14 @@ import {
 import styles from "./MovieModalDetails.scss";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { clearMovieFetched, getMovie } from "../../store/movies/actions";
+import {
+  clearMovieFetched,
+  getMovie,
+  addMovieToFavorites,
+} from "../../store/movies/actions";
 import imgPlaceholder from "../../assets/ic-placeholder.svg";
+import { ReactComponent as StarIcon } from "../../assets/ic-star.svg";
+import checkIsMovieExistInList from "../../helpers/checkIsMivieExistinList";
 
 const MovieDetailsModal = ({
   isOpen,
@@ -23,6 +29,7 @@ const MovieDetailsModal = ({
   movieId,
   clearMovieFetched,
   getMovie,
+  addMovieToFavorites,
   allMoviesState,
 }) => {
   const { item } = allMoviesState;
@@ -38,6 +45,13 @@ const MovieDetailsModal = ({
       clearMovieFetched();
     };
   }, [movieId, clearMovieFetched, getMovie]);
+
+  const handleToFavoriteClick = (id) => {
+    const indexOfObject = allMoviesState.data.findIndex((object) => {
+      return object.id === id;
+    });
+    addMovieToFavorites(allMoviesState.data[indexOfObject]);
+  };
 
   return (
     <Modal
@@ -76,6 +90,21 @@ const MovieDetailsModal = ({
               </Row>
               <Row>
                 <Col>
+                  <StarIcon
+                    className={
+                      item?.id &&
+                      checkIsMovieExistInList(
+                        item.id,
+                        allMoviesState.favouriteList
+                      )
+                        ? "favoriteStarActive"
+                        : "favoriteStarInActive"
+                    }
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleToFavoriteClick(item.id);
+                    }}
+                  />
                   <CardText>{item.year}</CardText>
                   <div>
                     {item?.genres?.map((genre) => (
@@ -104,5 +133,9 @@ const MovieDetailsModal = ({
 
 const mapStateToProps = ({ movies }) => ({ allMoviesState: movies });
 export default withRouter(
-  connect(mapStateToProps, { getMovie, clearMovieFetched })(MovieDetailsModal)
+  connect(mapStateToProps, {
+    getMovie,
+    addMovieToFavorites,
+    clearMovieFetched,
+  })(MovieDetailsModal)
 );
