@@ -1,106 +1,65 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardImg,
-  CardSubtitle,
-  CardTitle,
-  Col,
-  Row,
-} from "reactstrap";
+import { Button, ButtonGroup } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styles from "./ListOfMovies.scss";
 import {
   addMovieToFavorites,
+  filterMovies,
   getListMovies,
   getListMoviesClear,
 } from "../../store/movies/actions";
-import MovieDetailsModal from "../modal/MovieModalDetails";
-import useModal from "../../hooks/useModal";
-import imgPlaceholder from "../../assets/ic-placeholder.svg";
-import { ReactComponent as StarIcon } from "../../assets/ic-star.svg";
-import checkIsMovieExistInList from "../../helpers/checkIsMivieExistinList";
+import { ReactComponent as ListIcon } from "../../assets/list.svg";
+import { ReactComponent as TableIcon } from "../../assets/table.svg";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import { options } from "../../constants/constants";
+import ListOfMoviesListView from "./ListOfMoviesListView";
+import ListOfMoviesTableView from "./ListOfMoviesTableView";
 
-const ListOfMovies = ({
-  allMoviesState,
-  getListMovies,
-  getListMoviesClear,
-  addMovieToFavorites,
-}) => {
-  const [ready, updateReady] = useState(false);
+const ListOfMovies = ({ filterMovies }) => {
+  const [selectedOption, setSelectedOption] = useState("");
+  const [isTableView, setIsTableView] = useState(true);
+
   useEffect(() => {
-    const fetchMovies = () => {
-      getListMovies();
-    };
-    fetchMovies();
-    updateReady(true);
-    return () => {
-      getListMoviesClear();
-    };
-  }, [getListMoviesClear, getListMovies]);
-
-  const [modalVisible, toggleModal] = useModal();
-
-  const [currentMovieID, setCurrentMovieID] = useState(null);
-
-  const onClickMovie = (id) => {
-    setCurrentMovieID(id);
-    toggleModal();
-  };
-
-  const handleToFavoriteClick = (id) => {
-    const indexOfObject = allMoviesState.data.findIndex((object) => {
-      return object.id === id;
-    });
-    addMovieToFavorites(allMoviesState.data[indexOfObject]);
-  };
+    if (selectedOption) {
+      filterMovies(selectedOption);
+    }
+  }, [selectedOption, filterMovies]);
 
   return (
     <div className="moviesContainer">
-      <Row>
-        <Col>
-          {ready &&
-            allMoviesState?.data?.map((movie) => (
-              <Card
-                className="movieCard"
-                onClick={() => onClickMovie(movie.id)}
-                key={movie.id}
-              >
-                <StarIcon
-                  className={
-                    movie?.id &&
-                    checkIsMovieExistInList(
-                      movie.id,
-                      allMoviesState.favouriteList
-                    )
-                      ? "favoriteStarActive"
-                      : "favoriteStarInActive"
-                  }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleToFavoriteClick(movie.id);
-                  }}
-                />
+      <div>
+        <h3>Movies Gallery</h3>
+        <div className="menu">
+          <Dropdown
+            options={options}
+            onChange={({ value }) => setSelectedOption(value)}
+            value={selectedOption}
+            placeholder="Genre"
+          />
 
-                <CardImg
-                  src={!!movie.img ? movie.img : imgPlaceholder}
-                  alt="Card image"
-                  className="movieCardImg"
-                />
-                <CardBody className="movieCardDescription">
-                  <CardTitle tag="h5">{movie.name}</CardTitle>
-                  <CardSubtitle tag="h6">{movie.year}</CardSubtitle>
-                </CardBody>
-              </Card>
-            ))}
-        </Col>
-      </Row>
-      <MovieDetailsModal
-        isOpen={modalVisible}
-        onCancel={toggleModal}
-        movieId={currentMovieID}
-      />
+          <ButtonGroup>
+            <Button
+              color="primary"
+              outline
+              onClick={() => setIsTableView(false)}
+            >
+              <ListIcon />
+            </Button>
+            <Button
+              color="primary"
+              outline
+              active={isTableView}
+              onClick={() => setIsTableView(true)}
+            >
+              <TableIcon />
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        {isTableView ? <ListOfMoviesTableView /> : <ListOfMoviesListView />}
+      </div>
     </div>
   );
 };
@@ -110,5 +69,6 @@ export default withRouter(
     getListMovies,
     getListMoviesClear,
     addMovieToFavorites,
+    filterMovies,
   })(ListOfMovies)
 );

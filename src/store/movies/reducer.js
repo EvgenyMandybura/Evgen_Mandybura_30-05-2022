@@ -16,6 +16,9 @@ import {
   GET_FAVORITE_LIST_MOVIES_ERROR,
   REMOVE_MOVIE_FROM_FAVORITES_SUCCESS,
   REMOVE_MOVIE_FROM_FAVORITES_ERROR,
+  FILTER_LIST_OF_MOVIES,
+  FILTER_LIST_OF_MOVIES_SUCCESS,
+  FILTER_LIST_OF_MOVIES_ERROR,
 } from "./actionTypes";
 
 const initialState = {
@@ -25,6 +28,7 @@ const initialState = {
   item: null,
   error: "",
   loading: false,
+  filterQuery: "",
 };
 
 const movies = (state = initialState, action) => {
@@ -148,6 +152,27 @@ const movies = (state = initialState, action) => {
       break;
 
     case REMOVE_MOVIE_FROM_FAVORITES_ERROR:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+
+    case FILTER_LIST_OF_MOVIES:
+      state = {
+        ...state,
+        filterQuery: action.payload,
+        loading: true,
+      };
+      break;
+    case FILTER_LIST_OF_MOVIES_SUCCESS:
+      state = {
+        ...state,
+        data: action.payload,
+        loading: false,
+      };
+      break;
+    case FILTER_LIST_OF_MOVIES_ERROR:
       state = {
         ...state,
         loading: false,

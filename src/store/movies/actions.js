@@ -17,6 +17,9 @@ import {
   REMOVE_MOVIE_FROM_FAVORITES,
   REMOVE_MOVIE_FROM_FAVORITES_ERROR,
   REMOVE_MOVIE_FROM_FAVORITES_SUCCESS,
+  FILTER_LIST_OF_MOVIES,
+  FILTER_LIST_OF_MOVIES_SUCCESS,
+  FILTER_LIST_OF_MOVIES_ERROR,
 } from "./actionTypes";
 
 export const getListMovies = () => {
@@ -132,5 +135,26 @@ export const removeMovieFromFavoritesError = ({ message }) => {
   return {
     payload: { message },
     type: REMOVE_MOVIE_FROM_FAVORITES_ERROR,
+  };
+};
+
+export const filterMovies = (genre) => {
+  return {
+    payload: genre,
+    type: FILTER_LIST_OF_MOVIES,
+  };
+};
+
+export const filterMoviesSuccess = (data) => {
+  return {
+    payload: data,
+    type: FILTER_LIST_OF_MOVIES_SUCCESS,
+  };
+};
+
+export const filterMoviesError = ({ message = "Unknown error" }) => {
+  return {
+    payload: { message },
+    type: FILTER_LIST_OF_MOVIES_ERROR,
   };
 };

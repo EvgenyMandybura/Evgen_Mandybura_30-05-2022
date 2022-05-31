@@ -11,6 +11,8 @@ import {
   getFavoriteListMoviesError,
   removeMovieFromFavoritesSuccess,
   removeMovieFromFavoritesError,
+  filterMoviesSuccess,
+  filterMoviesError,
 } from "./actions";
 import {
   ADD_MOVIE_TO_FAVORITES,
@@ -18,6 +20,7 @@ import {
   GET_LIST_MOVIES,
   GET_MOVIE,
   REMOVE_MOVIE_FROM_FAVORITES,
+  FILTER_LIST_OF_MOVIES,
 } from "./actionTypes";
 import MoviesService from "../../services/MoviesService";
 import FavoritesService from "../../services/FavoritesService";
@@ -40,6 +43,20 @@ const getFavoriteMoviesListAsync = async () => {
 
 const removefromFavoriteAsync = async (movieId) => {
   return await FavoritesService.removeFromList(movieId);
+};
+
+const filterMoviesListAsync = async (genre) => {
+  return await MoviesService.filterMovies(genre);
+  /*
+  const allList = await MoviesService.getAllList();
+
+  const filteredList = allList.data.filter(
+    (movie) => movie.genres.length === 2
+  );
+
+  console.log("filteredList", filteredList);
+  return filteredList;
+  */
 };
 
 function* getMoviesList() {
@@ -87,6 +104,15 @@ function* getFavoriteMoviesList() {
   }
 }
 
+function* filterMovies({ payload: genre }) {
+  try {
+    const response = yield call(filterMoviesListAsync, genre);
+    yield put(filterMoviesSuccess(response));
+  } catch (error) {
+    yield put(filterMoviesError(error));
+  }
+}
+
 export function* watchGetMoviesList() {
   yield takeEvery(GET_LIST_MOVIES, getMoviesList);
 }
@@ -107,6 +133,10 @@ export function* watchRemoveFromMoviesList() {
   yield takeEvery(REMOVE_MOVIE_FROM_FAVORITES, removeFromFavorites);
 }
 
+export function* watchFilterMoviesList() {
+  yield takeEvery(FILTER_LIST_OF_MOVIES, filterMovies);
+}
+
 function* MoviesSaga() {
   yield all([
     fork(watchGetMoviesList),
@@ -114,6 +144,7 @@ function* MoviesSaga() {
     fork(watchAddToFavorite),
     fork(watchGetFavoriteMoviesList),
     fork(watchRemoveFromMoviesList),
+    fork(watchFilterMoviesList),
   ]);
 }
 

@@ -27,6 +27,39 @@
       justify-content: center;
     }
   }
+
+  &List {
+    width: 70vw;
+    margin: 12px 24px 12px 12px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 7px 5px rgba(221, 221, 221, 1);
+
+    &Description {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 250px;
+    }
+
+    &Badges {
+      display: flex;
+    }
+
+    @media  (max-width: 764px) {
+      &Description {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 200px;
+      }
+
+      &Badges {
+        display: block;
+      }
+    }
+
+  }
 }
 
 .toggleCard {
@@ -70,5 +103,19 @@
 .favoriteContainer {
   max-width: fit-content;
   min-width: 15vw;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 25px 10px 10px;
+}
+
+@media  (max-width: 764px) {
+  .menu {
+    display: flex;
+    justify-content: space-between;
+    padding: unset;
+  }
 }
 
